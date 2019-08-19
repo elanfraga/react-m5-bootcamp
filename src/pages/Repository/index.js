@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Loading, Owner, IssueList } from './styles';
+import { Loading, Owner, IssueList, IssueFilter } from './styles';
 
 export default class Repository extends Component {
   static propTypes = {
@@ -60,8 +60,15 @@ export default class Repository extends Component {
         </Owner>
 
         <IssueList>
-          {issues.map(issue => (
+          <IssueFilter>
+            <button>Todas</button>
+            <button>Abertas</button>
+            <button>Fechadas</button>
+          </IssueFilter>
+
+          {issues.map((issue, index) => (
             <li key={String(issue.id)}>
+              <h1>index</h1>
               <img src={issue.user.avatar_url} alt={issue.user.login} />
               <div>
                 <strong>
