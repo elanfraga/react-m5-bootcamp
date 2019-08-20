@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { darken } from 'polished';
 
 export const Loading = styled.div`
   color: #fff;
@@ -120,10 +121,40 @@ export const ButtonFilter = styled.button`
     margin-left: 10px;
   }
 
+  &:hover {
+    background: ${darken(0.3, '#ddd')};
+    color: white;
+  }
+
   ${props =>
     props.activeIndex === props.indexButton &&
     css`
       background: #576574;
       color: white;
     `}
+`;
+
+export const PageActions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  margin-top: 15px;
+  /* border-top: 1px solid #eee; */
+  border: 1px solid #eee;
+  border-radius: 4px;
+
+  button {
+    padding: 10px;
+    margin: 10px;
+
+    border-radius: 4px;
+    outline: 0;
+    border: 0;
+
+    &:hover {
+      background: ${darken(0.3, '#ddd')};
+      color: white;
+    }
+  }
 `;

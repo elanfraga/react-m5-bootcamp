@@ -4,16 +4,23 @@ import PropTypes from 'prop-types';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Loading, Owner, IssueList, IssueFilter, ButtonFilter } from './styles';
+import {
+  Loading,
+  Owner,
+  IssueList,
+  IssueFilter,
+  ButtonFilter,
+  PageActions,
+} from './styles';
 
 export default class Repository extends Component {
-  // static propTypes = {
-  //   match: PropTypes.shape({
-  //     params: PropTypes.shape({
-  //       repository: PropTypes.string,
-  //     }),
-  //   }).isRequired,
-  // };
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        repository: PropTypes.string,
+      }),
+    }).isRequired,
+  };
 
   state = {
     repository: {},
@@ -25,10 +32,12 @@ export default class Repository extends Component {
       { state: 'closed', label: 'Fechadas', active: false },
     ],
     filterIndex: 0,
+    page: 1,
   };
 
   async componentDidMount() {
     const { match } = this.props;
+    const { filters } = this.state;
 
     const repoName = decodeURIComponent(match.params.repository);
 
@@ -36,8 +45,9 @@ export default class Repository extends Component {
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
         params: {
-          state: 'open',
+          state: filters.find(filter => filter.active).state,
           per_page: 5,
+          page: 1,
         },
       }),
     ]);
@@ -51,11 +61,36 @@ export default class Repository extends Component {
 
   handleFilterClick = async filterIndex => {
     await this.setState({ filterIndex });
-    // this.loadIssues();
+    this.loadIssues();
+  };
+
+  loadIssues = async () => {
+    const { match } = this.props;
+    const { filters, filterIndex } = this.state;
+
+    const repoName = decodeURIComponent(match.params.repository);
+
+    const issues = await api.get(`/repos/${repoName}/issues`, {
+      params: {
+        state: filters[filterIndex].state,
+        per_page: 5,
+      },
+    });
+
+    this.setState({
+      issues: issues.data,
+    });
   };
 
   render() {
-    const { repository, issues, loading, filters, filterIndex } = this.state;
+    const {
+      repository,
+      issues,
+      loading,
+      filters,
+      filterIndex,
+      page,
+    } = this.state;
 
     if (loading) {
       return <Loading>Carregando</Loading>;
@@ -100,6 +135,12 @@ export default class Repository extends Component {
             </li>
           ))}
         </IssueList>
+
+        <PageActions>
+          <button>Anterior</button>
+          <span>Página: {page}</span>
+          <button>Próxima</button>
+        </PageActions>
       </Container>
     );
   }
