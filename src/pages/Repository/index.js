@@ -65,9 +65,16 @@ export default class Repository extends Component {
     this.loadIssues();
   };
 
+  handlePage = async index => {
+    const { page } = this.state;
+    await this.setState({ page: page + index });
+
+    this.loadIssues();
+  };
+
   loadIssues = async () => {
     const { match } = this.props;
-    const { filters, filterIndex } = this.state;
+    const { filters, filterIndex, page } = this.state;
 
     const repoName = decodeURIComponent(match.params.repository);
 
@@ -75,6 +82,7 @@ export default class Repository extends Component {
       params: {
         state: filters[filterIndex].state,
         per_page: 5,
+        page,
       },
     });
 
@@ -138,9 +146,11 @@ export default class Repository extends Component {
         </IssueList>
 
         <PageActions>
-          <ButtonPage page={page}>Anterior</ButtonPage>
+          <ButtonPage disabled={page < 2} onClick={() => this.handlePage(-1)}>
+            Anterior
+          </ButtonPage>
           <span>Página: {page}</span>
-          <ButtonPage page={page}>Próxima</ButtonPage>
+          <ButtonPage onClick={() => this.handlePage(1)}>Próxima</ButtonPage>
         </PageActions>
       </Container>
     );

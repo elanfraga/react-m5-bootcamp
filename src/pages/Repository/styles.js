@@ -145,9 +145,7 @@ export const PageActions = styled.div`
   border-radius: 4px;
 `;
 
-export const ButtonPage = styled.button.attrs(props => ({
-  disabled: props.page === 1,
-}))`
+export const ButtonPage = styled.button`
   padding: 10px;
   margin: 10px;
 
@@ -155,7 +153,7 @@ export const ButtonPage = styled.button.attrs(props => ({
   outline: 0;
   border: 0;
 
-  &:first-child[disabled] {
+  &[disabled] {
     cursor: not-allowed;
     opacity: 0.6;
   }
