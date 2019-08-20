@@ -11,6 +11,7 @@ import {
   IssueFilter,
   ButtonFilter,
   PageActions,
+  ButtonPage,
 } from './styles';
 
 export default class Repository extends Component {
@@ -137,9 +138,9 @@ export default class Repository extends Component {
         </IssueList>
 
         <PageActions>
-          <button>Anterior</button>
+          <ButtonPage page={page}>Anterior</ButtonPage>
           <span>Página: {page}</span>
-          <button>Próxima</button>
+          <ButtonPage page={page}>Próxima</ButtonPage>
         </PageActions>
       </Container>
     );

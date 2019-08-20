@@ -143,18 +143,25 @@ export const PageActions = styled.div`
   /* border-top: 1px solid #eee; */
   border: 1px solid #eee;
   border-radius: 4px;
+`;
 
-  button {
-    padding: 10px;
-    margin: 10px;
+export const ButtonPage = styled.button.attrs(props => ({
+  disabled: props.page === 1,
+}))`
+  padding: 10px;
+  margin: 10px;
 
-    border-radius: 4px;
-    outline: 0;
-    border: 0;
+  border-radius: 4px;
+  outline: 0;
+  border: 0;
 
-    &:hover {
-      background: ${darken(0.3, '#ddd')};
-      color: white;
-    }
+  &:first-child[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &:hover {
+    background: ${darken(0.3, '#ddd')};
+    color: white;
   }
 `;
