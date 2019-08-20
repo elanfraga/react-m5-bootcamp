@@ -4,21 +4,27 @@ import PropTypes from 'prop-types';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Loading, Owner, IssueList, IssueFilter } from './styles';
+import { Loading, Owner, IssueList, IssueFilter, ButtonFilter } from './styles';
 
 export default class Repository extends Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        repository: PropTypes.string,
-      }),
-    }).isRequired,
-  };
+  // static propTypes = {
+  //   match: PropTypes.shape({
+  //     params: PropTypes.shape({
+  //       repository: PropTypes.string,
+  //     }),
+  //   }).isRequired,
+  // };
 
   state = {
     repository: {},
     issues: [],
     loading: true,
+    filters: [
+      { state: 'all', label: 'Todas', active: true },
+      { state: 'open', label: 'Abertas', active: false },
+      { state: 'closed', label: 'Fechadas', active: false },
+    ],
+    filterIndex: 0,
   };
 
   async componentDidMount() {
@@ -43,8 +49,13 @@ export default class Repository extends Component {
     });
   }
 
+  handleFilterClick = async filterIndex => {
+    await this.setState({ filterIndex });
+    // this.loadIssues();
+  };
+
   render() {
-    const { repository, issues, loading } = this.state;
+    const { repository, issues, loading, filters, filterIndex } = this.state;
 
     if (loading) {
       return <Loading>Carregando</Loading>;
@@ -61,14 +72,21 @@ export default class Repository extends Component {
 
         <IssueList>
           <IssueFilter>
-            <button>Todas</button>
-            <button>Abertas</button>
-            <button>Fechadas</button>
+            {filters.map((filter, index) => (
+              <ButtonFilter
+                type="button"
+                key={filter.label}
+                activeIndex={filterIndex}
+                indexButton={index}
+                onClick={() => this.handleFilterClick(index)}
+              >
+                {filter.label}
+              </ButtonFilter>
+            ))}
           </IssueFilter>
 
-          {issues.map((issue, index) => (
+          {issues.map(issue => (
             <li key={String(issue.id)}>
-              <h1>index</h1>
               <img src={issue.user.avatar_url} alt={issue.user.login} />
               <div>
                 <strong>

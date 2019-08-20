@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Loading = styled.div`
   color: #fff;
@@ -106,17 +106,24 @@ export const IssueFilter = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 15px;
+`;
 
-  button {
-    padding: 10px;
-    /* margin: 0 0.25rem; */
+export const ButtonFilter = styled.button`
+  padding: 10px;
+  /* margin: 0 0.25rem; */
 
-    border-radius: 4px;
-    /* outline: 0; */
-    border: 0;
+  border-radius: 4px;
+  outline: 0;
+  border: 0;
 
-    & + button {
-      margin-left: 10px;
-    }
+  & + button {
+    margin-left: 10px;
   }
+
+  ${props =>
+    props.activeIndex === props.indexButton &&
+    css`
+      background: #576574;
+      color: white;
+    `}
 `;
